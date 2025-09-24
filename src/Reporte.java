@@ -2,6 +2,8 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
 public class Reporte {
+    private static int nextId = 1; // Contador estático para IDs únicos
+    public int id; // ID único para cada reporte
     String titulo;
     LocalDate fecha;
     double totalIngresos;
@@ -9,6 +11,7 @@ public class Reporte {
     double balance;
 
     public Reporte(String titulo, double totalIngresos, double totalEgresos) {
+        this.id = nextId++; // Asigna un ID único y lo incrementa
         this.titulo = titulo;
         this.fecha = LocalDate.now();
         this.totalIngresos = totalIngresos;
@@ -19,7 +22,8 @@ public class Reporte {
     public void display() {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         System.out.println("\n==================================================");
-        System.out.println("      REPORTE FINANCIERO: " + titulo.toUpperCase());
+        System.out.println("      REPORTE FINANCIERO (ID: " + this.id + ")");
+        System.out.println("      TÍTULO: " + titulo.toUpperCase());
         System.out.println("==================================================");
         System.out.println("Fecha de Generación: " + fecha.format(formatter));
         System.out.println("--------------------------------------------------");
@@ -32,6 +36,7 @@ public class Reporte {
     
     @Override
     public String toString() {
-        return "Reporte: '" + titulo + "' (Generado el " + fecha + ")";
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        return "ID: " + id + " | Título: '" + titulo + "' (Generado el " + fecha.format(formatter) + ")";
     }
 }
