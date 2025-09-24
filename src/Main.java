@@ -19,7 +19,7 @@ public class Main {
         boolean salir = false;
         while (!salir) {
             mostrarMenu();
-            int opcion = leerOpcion(); // Esta línea ahora funcionará
+            int opcion = leerOpcion();
 
             switch (opcion) {
                 case 1: enviarAvisosDePago(); break;
@@ -37,15 +37,15 @@ public class Main {
                 default:
                     System.out.println("Opción no válida. Por favor, intente de nuevo.");
             }
-            if (!salir) {
-                System.out.println("\nPresione Enter para continuar...");
+            // La pausa solo se aplica después de una acción del menú principal
+            if (!salir && (opcion == 1 || opcion == 2 || opcion == 7 || opcion == 8)) {
+                System.out.println("\nPresione Enter para volver al menú principal...");
                 scanner.nextLine();
             }
         }
         scanner.close();
     }
 
-    // El método corregido debe incluir "static"
     private static int leerOpcion() {
         while (!scanner.hasNextInt()) {
             System.out.println("Entrada no válida. Por favor, ingrese un número.");
@@ -63,7 +63,6 @@ public class Main {
         System.out.println("   Sistema Integral de Gestión Condominial");
         System.out.println("==================================================");
     }
-
     private static void mostrarMenu() {
         System.out.println("\nMenú del sistema:");
         System.out.println("1. 🔔 Enviar avisos de pago a residentes");
@@ -78,6 +77,94 @@ public class Main {
         System.out.print("Seleccione una opción: ");
     }
     
+    // --- SUBMENÚS CON BUCLE (SIN PAUSA) ---
+
+    private static void menuGestionReportes() {
+        while (true) {
+            System.out.println("\n--- 📊 Menú de Gestión de Reportes ---");
+            System.out.println("1. Ver todos los reportes guardados");
+            System.out.println("2. Buscar y ver un reporte por ID");
+            System.out.println("3. Eliminar un reporte por ID");
+            System.out.println("4. Volver al menú principal");
+            System.out.print("Seleccione una opción: ");
+            int opcion = leerOpcion();
+
+            switch(opcion) {
+                case 1: verTodosLosReportes(); break;
+                case 2: buscarYVerReporte(); break;
+                case 3: eliminarReporte(); break;
+                case 4: return;
+                default: System.out.println("Opción no válida.");
+            }
+            // Se eliminó la pausa de "Presione Enter"
+        }
+    }
+
+    private static void menuPagosYCuotas() {
+        while (true) {
+            System.out.println("\n--- 💳 Menú de Pagos y Cuotas ---");
+            System.out.println("1. Registrar pago individual a un residente");
+            System.out.println("2. Aplicar cuota de mantenimiento general ($800.00)");
+            System.out.println("3. Ver historial de pagos (Transacciones)");
+            System.out.println("4. Volver al menú principal");
+            System.out.print("Seleccione una opción: ");
+            int opcion = leerOpcion();
+
+            switch (opcion) {
+                case 1: registrarPagoIndividual(); break;
+                case 2: aplicarCuotaGeneral(); break;
+                case 3: verHistorialDePagos(); break;
+                case 4: return;
+                default: System.out.println("Opción no válida.");
+            }
+            // Se eliminó la pausa de "Presione Enter"
+        }
+    }
+
+    private static void menuGestionTareas() {
+        while (true) {
+            System.out.println("\n--- 🔧 Menú de Gestión de Tareas ---");
+            System.out.println("1. Ver todas las tareas");
+            System.out.println("2. Agregar nueva tarea");
+            System.out.println("3. Marcar tarea como completada");
+            System.out.println("4. Volver al menú principal");
+            System.out.print("Seleccione una opción: ");
+            int opcion = leerOpcion();
+
+            switch (opcion) {
+                case 1: verTodasLasTareas(); break;
+                case 2: agregarNuevaTarea(); break;
+                case 3: marcarTareaComoCompletada(); break;
+                case 4: return;
+                default: System.out.println("Opción no válida.");
+            }
+            // Se eliminó la pausa de "Presione Enter"
+        }
+    }
+    
+    private static void menuGestionResidentes() {
+        while (true) {
+            System.out.println("\n--- 🏠 Menú de Gestión de Residentes ---");
+            System.out.println("1. Ver lista de residentes");
+            System.out.println("2. Agregar nuevo residente");
+            System.out.println("3. Eliminar residente");
+            System.out.println("4. Volver al menú principal");
+            System.out.print("Seleccione una opción: ");
+            int opcion = leerOpcion();
+
+            switch (opcion) {
+                case 1: residentes.display(); break;
+                case 2: agregarNuevoResidente(); break;
+                case 3: eliminarResidente(); break;
+                case 4: return;
+                default: System.out.println("Opción no válida.");
+            }
+            // Se eliminó la pausa de "Presione Enter"
+        }
+    }
+
+    // --- MÉTODOS DE ACCIÓN (SIN CAMBIOS) ---
+
     private static void generarReporteFinanciero() {
         System.out.println("\n--- 📝 Generando Nuevo Reporte Financiero ---");
         System.out.print("Ingrese un título para este reporte (ej. 'Cierre de Septiembre 2025'): ");
@@ -97,23 +184,6 @@ public class Main {
         reportes.add(nuevoReporte);
         System.out.println("\n✅ ¡Reporte (ID: " + nuevoReporte.id + ") guardado con éxito!");
         historialActividades.push(new Actividad("Generó el reporte financiero ID " + nuevoReporte.id + ": " + titulo));
-    }
-
-    private static void menuGestionReportes() {
-        System.out.println("\n--- 📊 Menú de Gestión de Reportes ---");
-        System.out.println("1. Ver todos los reportes guardados");
-        System.out.println("2. Buscar y ver un reporte por ID");
-        System.out.println("3. Eliminar un reporte por ID");
-        System.out.println("4. Volver al menú principal");
-        System.out.print("Seleccione una opción: ");
-        int opcion = leerOpcion();
-        switch(opcion) {
-            case 1: verTodosLosReportes(); break;
-            case 2: buscarYVerReporte(); break;
-            case 3: eliminarReporte(); break;
-            case 4: break;
-            default: System.out.println("Opción no válida.");
-        }
     }
 
     private static void verTodosLosReportes() {
@@ -187,23 +257,6 @@ public class Main {
         historialActividades.push(new Actividad("Se enviaron avisos de pago automáticos."));
     }
     
-    private static void menuPagosYCuotas() {
-        System.out.println("\n--- 💳 Menú de Pagos y Cuotas ---");
-        System.out.println("1. Registrar pago individual a un residente");
-        System.out.println("2. Aplicar cuota de mantenimiento general ($800.00)");
-        System.out.println("3. Ver historial de pagos (Transacciones)");
-        System.out.println("4. Volver al menú principal");
-        System.out.print("Seleccione una opción: ");
-        int opcion = leerOpcion();
-        switch (opcion) {
-            case 1: registrarPagoIndividual(); break;
-            case 2: aplicarCuotaGeneral(); break;
-            case 3: verHistorialDePagos(); break;
-            case 4: break;
-            default: System.out.println("Opción no válida.");
-        }
-    }
-
     private static void verHistorialDePagos() {
         System.out.println("\n--- 🧾 Historial de Transacciones de Pago ---");
         if (historialPagos.size() == 0) {
@@ -246,23 +299,6 @@ public class Main {
         }
         System.out.println("¡Cuota aplicada a todos los " + residentes.size() + " residentes con éxito!");
         historialActividades.push(new Actividad("Aplicó cuota general de $" + cuota));
-    }
-
-    private static void menuGestionTareas() {
-        System.out.println("\n--- 🔧 Menú de Gestión de Tareas ---");
-        System.out.println("1. Ver todas las tareas");
-        System.out.println("2. Agregar nueva tarea");
-        System.out.println("3. Marcar tarea como completada");
-        System.out.println("4. Volver al menú principal");
-        System.out.print("Seleccione una opción: ");
-        int opcion = leerOpcion();
-        switch (opcion) {
-            case 1: verTodasLasTareas(); break;
-            case 2: agregarNuevaTarea(); break;
-            case 3: marcarTareaComoCompletada(); break;
-            case 4: break;
-            default: System.out.println("Opción no válida.");
-        }
     }
 
     private static void verTodasLasTareas() {
@@ -313,23 +349,6 @@ public class Main {
             historialActividades.push(new Actividad("Completó la tarea ID " + id));
         } else {
             System.out.println("No se encontró ninguna tarea con el ID " + id + ".");
-        }
-    }
-
-    private static void menuGestionResidentes() {
-        System.out.println("\n--- 🏠 Menú de Gestión de Residentes ---");
-        System.out.println("1. Ver lista de residentes");
-        System.out.println("2. Agregar nuevo residente");
-        System.out.println("3. Eliminar residente");
-        System.out.println("4. Volver al menú principal");
-        System.out.print("Seleccione una opción: ");
-        int opcion = leerOpcion();
-        switch (opcion) {
-            case 1: residentes.display(); break;
-            case 2: agregarNuevoResidente(); break;
-            case 3: eliminarResidente(); break;
-            case 4: break;
-            default: System.out.println("Opción no válida.");
         }
     }
 
