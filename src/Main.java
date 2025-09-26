@@ -1,5 +1,6 @@
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -111,7 +112,7 @@ public class Main {
             System.out.println("\n--- Menu de Pagos y Cuotas ---");
             System.out.println("1. Registrar pago individual a un residente");
             System.out.println("2. Aplicar cuota de mantenimiento general ($800.00)");
-            System.out.println("3. Ver historial de pagos (Transacciones)");
+            System.out.println("3. Ver historial de pagos");
             System.out.println("4. Volver al menu principal");
             System.out.print("Seleccione una opcion: ");
             int opcion = leerOpcion();
@@ -191,15 +192,44 @@ public class Main {
         System.out.println("\nReporte (ID: " + nuevoReporte.id + ") guardado con exito!");
         historialActividades.push(new Actividad("Genero el reporte financiero ID " + nuevoReporte.id + ": " + titulo));
     }
-
+    
+    // =======================================================================
+    // MÉTODO MODIFICADO PARA MOSTRAR LA TABLA GRÁFICA
+    // =======================================================================
     private static void verTodosLosReportes() {
-        System.out.println("\n--- Lista de Reportes Financieros Guardados ---");
+        System.out.println("\n--- Vista Grafica de Reportes Financieros ---");
+        historialActividades.push(new Actividad("Consulto la lista de reportes guardados."));
+
         if (reportes.size() == 0) {
             System.out.println("No hay reportes guardados todavia. Genere uno desde el menu principal.");
-        } else {
-            reportes.display();
+            return;
         }
-        historialActividades.push(new Actividad("Consulto la lista de reportes guardados."));
+
+        // Se define el formato y separadores de la tabla para una vista limpia
+        String headerFormat = "| %-4s | %-35s | %-12s | %-18s | %-18s | %-18s |%n";
+        String rowFormat = "| %-4d | %-35s | %-12s | $%,-17.2f | $%,-17.2f | $%,-17.2f |%n";
+        String separator = "+------+-------------------------------------+--------------+--------------------+--------------------+--------------------+%n";
+
+        // Imprimir la cabecera de la tabla
+        System.out.format(separator);
+        System.out.format(headerFormat, "ID", "TITULO DEL REPORTE", "FECHA", "INGRESOS TOTALES", "EGRESOS TOTALES", "BALANCE");
+        System.out.format(separator);
+
+        // Se itera sobre la lista de reportes para imprimir cada uno como una fila
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        for (int i = 0; i < reportes.size(); i++) {
+            Reporte r = reportes.get(i);
+            System.out.format(rowFormat,
+                    r.id,
+                    r.titulo,
+                    r.fecha.format(formatter),
+                    r.totalIngresos,
+                    r.totalEgresos,
+                    r.balance);
+        }
+
+        // Imprimir el pie de la tabla
+        System.out.format(separator);
     }
 
     private static void buscarYVerReporte() {
